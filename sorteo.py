@@ -19,15 +19,19 @@ from collections import namedtuple
 from random import shuffle
 
 # load csv files
-def cvsReader(filename:str) -> list:    
+def cvsReader(filename:str) -> list: 
+    '''
+    Read CSV
+
+    >>> os.path.isfile('./participants.csv')
+    True
+    >>> type(cvsReader('participants'))
+    <class 'list'>
+    '''    
     with open('{}.csv'.format(filename),'r') as f:
         reader = csv.reader(f)
         data = namedtuple(filename,next(reader))
         return [data(*row) for row in reader ]
-
-     
-participants = cvsReader('participants')
-reward = cvsReader('reward')
 
 winners = []
 def winner(data:list) -> str:
@@ -45,7 +49,12 @@ def exit_app(signal,frame):
     print("\nFelicitaciones a todos los Ganadores\n{}".format(w))
     sys.exit(0)
 
-signal.signal(signal.SIGINT, exit_app)
-while True:
-    input("El Ganador es ....")
-    print(winner(participants))
+if __name__ == "__main__":
+    signal.signal(signal.SIGINT, exit_app)
+
+    participants = cvsReader('participants')
+    reward = cvsReader('reward')
+
+    while True:
+        input("El Ganador es ....")
+        print(winner(participants))
